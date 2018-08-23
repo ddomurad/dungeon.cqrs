@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\dungeon.cqrs.core\dungeon.cqrs.core.csproj" />
+    <ProjectReference Include="..\dungeon.cqrs.implementation\dungeon.cqrs.implementation.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="mongocsharpdriver" Version="2.5.0" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+</Project>

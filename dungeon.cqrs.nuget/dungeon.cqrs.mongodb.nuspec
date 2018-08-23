@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>dungeon.cqrs.mongodb</id>
+        <version>1.0.0</version>
+        <authors>Daniel Domurad</authors>
+        <owners>Daniel Domurad</owners>
+        <description>Extentions tos simple CQRS pattern implementation.</description>
+        <releaseNotes>Initial package</releaseNotes>
+        <tags>dungeon cqrs es mongodb service_provider</tags>
+        <dependencies>
+            <dependency id="dungeon.cqrs" version="1.0.0"></dependency>
+        </dependencies>
+    </metadata>
+
+
+    <files>
+        <file src="../dungeon.cqrs.mongodb/bin/Release/**/dungeon.cqrs.mongodb.dll" target="lib/" />
+    </files>
+</package>
