@@ -17,14 +17,14 @@ namespace dungeon.cqrs.memory_store
                 if (Store.ContainsKey(aggregateId))
                     return Task.FromResult(Store[aggregateId]);
 
-                return Task.FromResult((Memento) null);
+                return Task.FromResult((Memento)null);
 
             }
         }
 
         public Task<ulong> ReadVersion(string aggregateId)
         {
-            lock(locker)
+            lock (locker)
             {
                 if (Store.ContainsKey(aggregateId))
                     return Task.FromResult(Store[aggregateId].Metadata.Version);

@@ -156,7 +156,7 @@ namespace dungeon.cqrs.event_sourcing
             return (T)aggregate;
         }
 
-        private void  CommitAggregate(IAggregateRoot stream)
+        private void CommitAggregate(IAggregateRoot stream)
         {
             if (!commitedEventStreams.Contains(stream))
                 commitedEventStreams.Add(stream);

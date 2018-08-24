@@ -27,7 +27,7 @@ namespace dungeon.cqrs.implementation.events
                 await FireEvent<TE>(handler, e, null);
         }
 
-        public async Task Send<TE, TC>(TE e, TC c) 
+        public async Task Send<TE, TC>(TE e, TC c)
             where TE : IEvent
             where TC : ICommand
         {

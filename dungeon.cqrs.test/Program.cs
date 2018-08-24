@@ -11,71 +11,90 @@ using dungeon.cqrs.mongodb;
 using dungeon.cqrs.test.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace dungeon.cqrs.test {
-    class Program {
+namespace dungeon.cqrs.test
+{
+    class Program
+    {
 
-        static void Main (string[] args) {
-            var serviceCollection = new ServiceCollection ();
-            
+        static void Main(string[] args)
+        {
+            var serviceCollection = new ServiceCollection();
+
             DungeonMongoRegistrationTool.RegisterInternals();
 
             var serviceProvider = serviceCollection
-                .AddCqrs<ConsoleLogger> ()
+                .AddCqrs<ConsoleLogger>()
                     .AddMongoEventSourcing("mongodb://172.17.0.2:27017", "test_cqrs")
                     .WithMongoSnapshots(
                         "mongodb://172.17.0.2:27017", "test_cqrs",
-                        c => c.SetDefaultSnapshotConfig (SnapshotConfig.VersionDiff (10)))
-                    .RegisterCommandHandler<UserCommandHandler> ()
-                    .RegisterEventHandler<UserEventHandler> ()
-                    .Build ()
-                .BuildServiceProvider ();
+                        c => c.SetDefaultSnapshotConfig(SnapshotConfig.VersionDiff(10)))
+                    .RegisterCommandHandler<UserCommandHandler>()
+                    .RegisterEventHandler<UserEventHandler>()
+                    .Build()
+                .BuildServiceProvider();
 
-            DungeonMongoRegistrationTool.RegisterAll (typeof (Program).Assembly);
+            DungeonMongoRegistrationTool.RegisterAll(typeof(Program).Assembly);
 
-            var cmdDispatch = serviceProvider.GetService<ICommandDispatcher> ();
+            var cmdDispatch = serviceProvider.GetService<ICommandDispatcher>();
 
-            for (int i = 0; i < 10; i++) {
-                Task.Factory.StartNew (() => {
-                    var sw = new Stopwatch ();
-                    sw.Start ();
-                    while (true) {
-                        System.Console.WriteLine ("E");
-                        sw.Restart ();
-                        try {
-                            
+            for (int i = 0; i < 10; i++)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    while (true)
+                    {
+                        System.Console.WriteLine("E");
+                        sw.Restart();
+                        try
+                        {
+
                             //cmdDispatch.Dispatch<Guid, RegisterUserCommand> (new RegisterUserCommand { Login = "Boleslaw", }, 5).Wait ();
-                            cmdDispatch.DispatchAbstract<Guid> (new RegisterUserCommand { Login = "Boleslaw", }, 5).Wait ();
-                        } catch (Exception e) {
-                            System.Console.WriteLine (e);
+                            cmdDispatch.DispatchAbstract<Guid>(new RegisterUserCommand { Login = "Boleslaw", }, 5).Wait();
+                        }
+                        catch (Exception e)
+                        {
+                            System.Console.WriteLine(e);
                         }
 
-                        try {
-                            cmdDispatch.DispatchAbstract<Guid> (new RegisterUserCommand { Login = "Marian" }, 5).Wait ();
+                        try
+                        {
+                            cmdDispatch.DispatchAbstract<Guid>(new RegisterUserCommand { Login = "Marian" }, 5).Wait();
                             //cmdDispatch.Dispatch<Guid, RegisterUserCommand> (new RegisterUserCommand { Login = "Marian" }, 5).Wait ();
-                        } catch (Exception e) {
-                            System.Console.WriteLine (e);
+                        }
+                        catch (Exception e)
+                        {
+                            System.Console.WriteLine(e);
                         }
 
-                        try {
-                            cmdDispatch.DispatchAbstract (new RemoveUserCommand { Login = "Marian" }, 5).Wait ();
+                        try
+                        {
+                            cmdDispatch.DispatchAbstract(new RemoveUserCommand { Login = "Marian" }, 5).Wait();
                             //cmdDispatch.Dispatch (new RemoveUserCommand { Login = "Marian" }, 5).Wait ();
-                        } catch (Exception e) {
-                            System.Console.WriteLine (e);
+                        }
+                        catch (Exception e)
+                        {
+                            System.Console.WriteLine(e);
                         }
 
-                        try {
-                            cmdDispatch.DispatchAbstract (new RemoveUserCommand { Login = "Boleslaw" }, 5).Wait ();
+                        try
+                        {
+                            cmdDispatch.DispatchAbstract(new RemoveUserCommand { Login = "Boleslaw" }, 5).Wait();
                             //cmdDispatch.Dispatch (new RemoveUserCommand { Login = "Boleslaw" }, 5).Wait ();
-                        } catch (Exception e) {
-                            System.Console.WriteLine (e);
                         }
-                        System.Console.WriteLine ("E: " + sw.ElapsedMilliseconds);
+                        catch (Exception e)
+                        {
+                            System.Console.WriteLine(e);
+                        }
+                        System.Console.WriteLine("E: " + sw.ElapsedMilliseconds);
                     }
                 }, TaskCreationOptions.LongRunning);
             }
 
-            while (true) {
-                Thread.Sleep (10000);
+            while (true)
+            {
+                Thread.Sleep(10000);
             }
         }
     }

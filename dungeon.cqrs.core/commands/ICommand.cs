@@ -1,3 +1,4 @@
-namespace dungeon.cqrs.core.commands {
-    public interface ICommand { }
+namespace dungeon.cqrs.core.commands
+{
+    public interface ICommand {}
 }

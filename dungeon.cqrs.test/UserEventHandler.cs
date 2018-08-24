@@ -6,7 +6,7 @@ using dungeon.cqrs.test.Models;
 
 namespace dungeon.cqrs.test
 {
-    public class UserEventHandler : 
+    public class UserEventHandler :
         IEventHandler<AggregateCreatedEvent>,
         IEventHandler<AggregateRemovedEvent>,
         IEventHandler<LoginReservedEvent>

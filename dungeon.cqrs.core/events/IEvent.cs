@@ -1,3 +1,4 @@
-namespace dungeon.cqrs.core.events {
+namespace dungeon.cqrs.core.events
+{
     public interface IEvent { }
 }
