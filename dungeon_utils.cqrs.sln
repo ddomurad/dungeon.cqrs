@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.core", "dungeon.cqrs.core\dungeon.cqrs.core.csproj", "{71801D38-2506-4BCA-AF31-8281D71396CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.core", "src\dungeon.cqrs.core\dungeon.cqrs.core.csproj", "{71801D38-2506-4BCA-AF31-8281D71396CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.implementation", "dungeon.cqrs.implementation\dungeon.cqrs.implementation.csproj", "{4A10030A-65EC-4ADF-8855-13483CD4DFC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.implementation", "src\dungeon.cqrs.implementation\dungeon.cqrs.implementation.csproj", "{4A10030A-65EC-4ADF-8855-13483CD4DFC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.mongodb", "dungeon.cqrs.mongodb\dungeon.cqrs.mongodb.csproj", "{A6D12998-6CAB-4320-9DF9-C428C839FF59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.mongodb", "src\dungeon.cqrs.mongodb\dungeon.cqrs.mongodb.csproj", "{A6D12998-6CAB-4320-9DF9-C428C839FF59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.test", "dungeon.cqrs.test\dungeon.cqrs.test.csproj", "{1478F750-95DF-48BE-9D29-09D7985A7AA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.test", "tests\dungeon.cqrs.test\dungeon.cqrs.test.csproj", "{1478F750-95DF-48BE-9D29-09D7985A7AA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.memory_store", "dungeon.cqrs.memory_store\dungeon.cqrs.memory_store.csproj", "{0D0AFAE4-F143-496F-917B-52F46CDCFDDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dungeon.cqrs.memory_store", "src\dungeon.cqrs.memory_store\dungeon.cqrs.memory_store.csproj", "{0D0AFAE4-F143-496F-917B-52F46CDCFDDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

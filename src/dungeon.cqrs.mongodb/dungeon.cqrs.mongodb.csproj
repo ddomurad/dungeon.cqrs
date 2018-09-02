@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\dungeon.cqrs.core\dungeon.cqrs.core.csproj" />
+    <ProjectReference Include="..\..\src\dungeon.cqrs.implementation\dungeon.cqrs.implementation.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="mongocsharpdriver" Version="2.5.0" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <PackageId>dungeon_cqrs.mongo_store</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Daniel Domurad</Authors>
+  </PropertyGroup>
+</Project>
