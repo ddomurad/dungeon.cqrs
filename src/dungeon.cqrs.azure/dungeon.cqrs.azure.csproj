@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>dungeon_cqrs.azure</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>Daniel Domurad</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />    
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\dungeon.cqrs.core\dungeon.cqrs.core.csproj" />
+    <ProjectReference Include="..\..\src\dungeon.cqrs.implementation\dungeon.cqrs.implementation.csproj" />
+  </ItemGroup>
+</Project>
