@@ -75,6 +75,7 @@ namespace dungeon.cqrs.implementation
 
         public DungeonServiceCollectionEx_step4 WithoutSnapshots()
         {
+            serviceCollection.AddScoped<ISnapshotManager, NullSnapshotManager>();
             return new DungeonServiceCollectionEx_step4(this);
         }
     }

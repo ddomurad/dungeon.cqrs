@@ -25,6 +25,7 @@ namespace dungeon.cqrs.test
             var serviceProvider = serviceCollection
                 .AddCqrs<ConsoleLogger>()
                     .AddMongoEventSourcing("mongodb://172.17.0.2:27017", "test_cqrs")
+                    // .WithoutSnapshots()
                     .WithMongoSnapshots(
                         "mongodb://172.17.0.2:27017", "test_cqrs",
                         c => c.SetDefaultSnapshotConfig(SnapshotConfig.VersionDiff(10)))
