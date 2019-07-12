@@ -50,7 +50,6 @@ namespace dungeon.cqrs.test
                         sw.Restart();
                         try
                         {
-
                             //cmdDispatch.Dispatch<Guid, RegisterUserCommand> (new RegisterUserCommand { Login = "Boleslaw", }, 5).Wait ();
                             cmdDispatch.DispatchAbstract<Guid>(new RegisterUserCommand { Login = "Boleslaw", }, 5).Wait();
                         }
