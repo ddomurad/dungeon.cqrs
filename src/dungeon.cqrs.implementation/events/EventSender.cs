@@ -2,21 +2,24 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using dungeon.cqrs.core.commands;
+using dungeon.cqrs.core.diagnostics;
 using dungeon.cqrs.core.events;
-using dungeon.cqrs.core.wrappers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace dungeon.cqrs.implementation.events
 {
     public class EventSender : IEventSender
     {
-        private readonly ILoggerWrapper loggerWrapper;
+        private readonly IDiagnosticsFormater diagnosticsFormater;
         private readonly IServiceProvider serviceProvider;
+        private readonly ILogger logger;
 
-        public EventSender(ILoggerWrapper loggerWrapper, IServiceProvider serviceProvider)
+        public EventSender(IDiagnosticsFormater diagnosticsFormater, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            this.loggerWrapper = loggerWrapper;
+            this.diagnosticsFormater = diagnosticsFormater;
+            this.logger = loggerFactory.CreateLogger<EventSender>();
         }
 
         public async Task Send<TE>(TE e) where TE : IEvent
@@ -42,20 +45,19 @@ namespace dungeon.cqrs.implementation.events
             try
             {
                 if (DungeonGlobalConfiguration.EventTrace)
-                    loggerWrapper.BeforeEventInvoke(e, handler);
+                    this.logger.LogInformation(diagnosticsFormater.BeforeEventInvoke(e, handler));
 
                 await handler.Handle(e, c);
 
                 if (DungeonGlobalConfiguration.EventTrace)
-                    loggerWrapper.AfterEventInvoke(e, handler);
-
+                    this.logger.LogInformation(diagnosticsFormater.AfterEventInvoke(e, handler));
             }
             catch (Exception ex)
             {
                 if (DungeonGlobalConfiguration.EventTrace)
-                    loggerWrapper.OnEventInvokeError(e, handler, ex);
-
-                loggerWrapper.Error(ex.ToString());
+                    this.logger.LogError(diagnosticsFormater.OnEventInvokeError(e, handler, ex));
+                else 
+                    this.logger.LogError(ex.Message, ex);
             }
         }
     }

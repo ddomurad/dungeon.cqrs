@@ -33,10 +33,13 @@ namespace dungeon.cqrs.test
         public async Task Handle(RemoveUserCommand command)
         {
             var login = await eventSource.Pull<UserLoginName>(command.Login);
-            var user = await eventSource.Pull<UserDom>(login.UserId);
+            if(login != null)
+            {
+                var user = await eventSource.Pull<UserDom>(login.UserId);
 
-            login.Delete();
-            user.Delete();
+                login.Delete();
+                user?.Delete();
+            }
 
             await eventSource.PushChanges(command);
         }

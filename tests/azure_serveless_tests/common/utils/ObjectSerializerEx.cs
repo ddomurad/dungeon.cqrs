@@ -10,7 +10,7 @@ namespace common.utils
             if(string.IsNullOrEmpty(str))
                 return (T)null;
             
-            return (T)JsonConvert.DeserializeObject<T>(str);
+            return (T)JsonConvert.DeserializeObject<T>(str,  new JsonSerializerSettings{TypeNameHandling = TypeNameHandling.All});
         }
 
         public static string SerializeObject<T>(this T obj) where T: class

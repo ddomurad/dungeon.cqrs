@@ -5,20 +5,24 @@ using System.Reflection;
 using System.Threading.Tasks;
 using dungeon.cqrs.core.commands;
 using dungeon.cqrs.core.exceptions;
-using dungeon.cqrs.core.wrappers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace dungeon.cqrs.implementation.commands
 {
     public class CommandDispatcher : ICommandDispatcher
     {
-
         private readonly IServiceProvider serviceProvider;
+        private readonly ILogger logger;
+
         private static MethodInfo dispatchCmdMethodInfo = null;
         private static MethodInfo dispatchCmdWithReturnMethodInfo = null;
-        public CommandDispatcher(IServiceProvider serviceProvider)
+        
+
+        public CommandDispatcher(ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
+            this.logger = loggerFactory.CreateLogger<CommandDispatcher>();
 
             if (dispatchCmdMethodInfo == null || dispatchCmdWithReturnMethodInfo == null)
             {
@@ -53,8 +57,9 @@ namespace dungeon.cqrs.implementation.commands
                 }
                 catch (DungeonConcurrencyException e)
                 {
-                    serviceProvider.GetService<ILoggerWrapper>()?.Warning($"Concurrency promebs with command: {command.GetType().FullName}. Attempts left: {concurencyRetry}");
-                    serviceProvider.GetService<ILoggerWrapper>()?.Warning(e.ToString());
+                    logger.LogWarning($"Concurrency promebs with command: {command.GetType().FullName}. Attempts left: {concurencyRetry}");
+                    logger.LogWarning(e.ToString());
+
                     if (concurencyRetry-- <= 0)
                         throw e;
                 }
@@ -73,8 +78,8 @@ namespace dungeon.cqrs.implementation.commands
                 }
                 catch (DungeonConcurrencyException e)
                 {
-                    serviceProvider.GetService<ILoggerWrapper>()?.Warning($"Concurrency promebs with command: {command.GetType().FullName}. Attempts left: {concurencyRetry}");
-                    serviceProvider.GetService<ILoggerWrapper>()?.Warning(e.ToString());
+                    logger.LogWarning($"Concurrency promebs with command: {command.GetType().FullName}. Attempts left: {concurencyRetry}");
+                    logger.LogWarning(e.ToString());
                     if (concurencyRetry-- <= 0)
                         throw e;
                 }

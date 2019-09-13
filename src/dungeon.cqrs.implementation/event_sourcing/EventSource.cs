@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using dungeon.cqrs.core.commands;
 using dungeon.cqrs.core.event_sourcing;
 using dungeon.cqrs.core.event_sourcing.models;
 using dungeon.cqrs.core.events;
 using dungeon.cqrs.core.exceptions;
-using dungeon.cqrs.core.wrappers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace dungeon.cqrs.event_sourcing
 {
@@ -147,7 +146,7 @@ namespace dungeon.cqrs.event_sourcing
             if (aggregate.Metadata.Exists)
             {
                 var errMsg = $"CreateNew: Cant create aggregate. Aggregate already exists '{id}'.";
-                serviceProvider.GetService<ILoggerWrapper>()?.Warning(errMsg);
+                serviceProvider.GetService<ILoggerFactory>()?.CreateLogger<EventSource>()?.LogWarning(errMsg);
                 throw new DungeonAggregateAlreadyExistsException(errMsg);
             }
 
@@ -168,7 +167,7 @@ namespace dungeon.cqrs.event_sourcing
             if (aggregateType.GetConstructors().Count() > 1)
             {
                 var errMsg = $"RawPull: Aggregate '{aggregateType.FullName}' has to many constructors.";
-                serviceProvider.GetService<ILoggerWrapper>()?.Error(errMsg);
+                serviceProvider.GetService<ILoggerFactory>()?.CreateLogger<EventSource>()?.LogError(errMsg);
                 throw new DungeonInvalidConstructorException(
                     errMsg);
             }

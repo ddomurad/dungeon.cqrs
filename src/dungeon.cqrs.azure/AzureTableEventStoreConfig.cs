@@ -24,7 +24,7 @@ namespace dungeon.cqrs.azure
 
         protected string ValidateTableName(string tableName)
         {
-            if (string.IsNullOrWhiteSpace(tableName) || !tableName.All(c => (c > 'a' && c < 'z') || (c > 'A' && c < 'Z') || (c > '0' && c < '9')))
+            if (string.IsNullOrWhiteSpace(tableName) || !tableName.All(c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
                 throw new ArgumentException($"Invalid table name: {tableName}.");
 
             return tableName;

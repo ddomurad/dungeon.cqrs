@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using dungeon.cqrs.core.commands;
@@ -15,6 +14,8 @@ namespace dungeon.cqrs.test
 {
     class Program
     {
+        static MemoryEventStore eventStore =  new MemoryEventStore();
+        static MemorySnapshotStore snapshostStore = new MemorySnapshotStore();
 
         static void Main(string[] args)
         {
@@ -23,22 +24,27 @@ namespace dungeon.cqrs.test
             DungeonMongoRegistrationTool.RegisterInternals();
 
             var serviceProvider = serviceCollection
-                .AddCqrs<ConsoleLogger>()
-                    .AddMongoEventSourcing("mongodb://172.17.0.2:27017", "test_cqrs")
+                .AddCqrs()
+                    .AddEventSourcing(() => eventStore)
+                    //  .AddMongoEventSourcing("mongodb://172.17.0.2:27017", "test_cqrs")
                     // .WithoutSnapshots()
-                    .WithMongoSnapshots(
-                        "mongodb://172.17.0.2:27017", "test_cqrs",
-                        c => c.SetDefaultSnapshotConfig(SnapshotConfig.VersionDiff(10)))
+                    
+                    // .WithMongoSnapshots(
+                    //     "mongodb://172.17.0.2:27017", "test_cqrs",
+                    //     c => c.SetDefaultSnapshotConfig(SnapshotConfig.VersionDiff(10)))
+                    // .WithSnapshots(() => snapshostStore, c => c.SetDefaultSnapshotConfig(SnapshotConfig.VersionDiff(10)))
+                    .WithoutSnapshots()
                     .RegisterCommandHandler<UserCommandHandler>()
                     .RegisterEventHandler<UserEventHandler>()
                     .Build()
+                    .AddLogging()
                 .BuildServiceProvider();
 
             DungeonMongoRegistrationTool.RegisterAll(typeof(Program).Assembly);
 
             var cmdDispatch = serviceProvider.GetService<ICommandDispatcher>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Task.Factory.StartNew(() =>
                 {

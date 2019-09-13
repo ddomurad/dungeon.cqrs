@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using dungeon.cqrs.core.commands;
+using dungeon.cqrs.core.diagnostics;
 using dungeon.cqrs.core.event_sourcing;
 using dungeon.cqrs.core.events;
-using dungeon.cqrs.core.wrappers;
 using dungeon.cqrs.event_sourcing;
 using dungeon.cqrs.implementation.commands;
+using dungeon.cqrs.implementation.diagnostics;
 using dungeon.cqrs.implementation.events;
 using dungeon.cqrs.implementation.priv;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,14 +15,16 @@ namespace dungeon.cqrs.implementation
 {
     public static partial class DungeonServiceCollectionEx
     {
-        public static DungeonServiceCollectionEx_step2 AddCqrs<TLogget>(this IServiceCollection serviceCollection) where TLogget : class, ILoggerWrapper
+        public static DungeonServiceCollectionEx_step2 AddCqrs(this IServiceCollection serviceCollection)
         {
-
-            serviceCollection.AddSingleton<ILoggerWrapper, TLogget>();
-
+            return AddCqrs<DiagnosticsFormater>(serviceCollection);
+        }
+        public static DungeonServiceCollectionEx_step2 AddCqrs<TDiagnosticsFormater>(this IServiceCollection serviceCollection) where TDiagnosticsFormater : class, IDiagnosticsFormater
+        {
             serviceCollection.AddScoped<ICommandDispatcher, CommandDispatcher>();
             serviceCollection.AddScoped<IEventSender, EventSender>();
-
+            serviceCollection.AddSingleton<IDiagnosticsFormater, TDiagnosticsFormater>();
+            
             return new DungeonServiceCollectionEx_step2(new DungeonServiceCollectionEx_step(serviceCollection));
         }
     }

@@ -10,7 +10,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 
     <PackageId>dungeon_cqrs.mongo_store</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.2.0</Version>
     <Authors>Daniel Domurad</Authors>
   </PropertyGroup>
 </Project>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using dungeon.cqrs.core.event_sourcing;
 using dungeon.cqrs.core.event_sourcing.models;
+using dungeon.cqrs.core.exceptions;
 
 namespace dungeon.cqrs.memory_store
 {
@@ -21,6 +22,7 @@ namespace dungeon.cqrs.memory_store
             {
                 events.ToList().ForEach(e =>
                 {
+                    validateEventVersions(e);
                     if (!Events.ContainsKey(e.Metadata.AggregateId))
                         Events.Add(e.Metadata.AggregateId, new List<SourcedEvent>());
 
@@ -31,12 +33,21 @@ namespace dungeon.cqrs.memory_store
             }
         }
 
+        private void validateEventVersions(SourcedEvent e)
+        {
+            if (Events.ContainsKey(e.Metadata.AggregateId))
+            {
+                if(Events[e.Metadata.AggregateId].Any(se => se.EventId == e.EventId))
+                    throw new DungeonConcurrencyException();
+            }
+        }
+
         public Task<IEnumerable<SourcedEvent>> ReadEvents(string aggregateId)
         {
             lock (locker)
             {
                 if (Events.ContainsKey(aggregateId))
-                    return Task.FromResult(Events[aggregateId].OrderBy(e => e.Metadata.Version).AsEnumerable());
+                    return Task.FromResult(Events[aggregateId].OrderBy(e => e.Metadata.Version).ToList().AsEnumerable());
 
                 return Task.FromResult(new List<SourcedEvent>().AsEnumerable());
             }
@@ -48,7 +59,7 @@ namespace dungeon.cqrs.memory_store
             {
                 if (Events.ContainsKey(aggregateId))
                     return Task.FromResult(
-                        Events[aggregateId].Where(e => e.Metadata.Version > fromVersion).OrderBy(e => e.Metadata.Version).AsEnumerable());
+                        Events[aggregateId].Where(e => e.Metadata.Version > fromVersion).OrderBy(e => e.Metadata.Version).ToList().AsEnumerable());
                 return Task.FromResult(new List<SourcedEvent>().AsEnumerable());
             }
         }
@@ -59,7 +70,7 @@ namespace dungeon.cqrs.memory_store
             {
                 if (Events.ContainsKey(aggregateId))
                     return Task.FromResult(
-                        Events[aggregateId].Where(e => e.Metadata.CommandId == cmdId).OrderBy(e => e.Metadata.Version).AsEnumerable());
+                        Events[aggregateId].Where(e => e.Metadata.CommandId == cmdId).OrderBy(e => e.Metadata.Version).ToList().AsEnumerable());
                 return Task.FromResult(new List<SourcedEvent>().AsEnumerable());
             }
         }
@@ -71,6 +82,7 @@ namespace dungeon.cqrs.memory_store
                 return Task.FromResult(Events.Values.SelectMany(e => e)
                     .Where(e => e.Metadata.Date <= replayTill)
                     .OrderBy(e => e.Metadata.Version)
+                    .ToList()
                     .AsEnumerable());
             }
         }
@@ -82,6 +94,7 @@ namespace dungeon.cqrs.memory_store
                 return Task.FromResult(Events.Values.SelectMany(e => e)
                     .Where(e => e.Metadata.AggregateId == aggregateId && e.Metadata.Date <= replayTill)
                     .OrderBy(e => e.Metadata.Version)
+                    .ToList()
                     .AsEnumerable());
             }
         }

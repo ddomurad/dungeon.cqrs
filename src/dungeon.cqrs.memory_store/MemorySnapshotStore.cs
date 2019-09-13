@@ -18,7 +18,6 @@ namespace dungeon.cqrs.memory_store
                     return Task.FromResult(Store[aggregateId]);
 
                 return Task.FromResult((Memento)null);
-
             }
         }
 

@@ -13,12 +13,6 @@ using common.command;
 
 namespace cmd_api
 {
-    public class TestApiModel
-    {
-        public string Elo1 {get; set;}
-        public int Elo2 {get; set;}
-    }
-
     public class create_basket
     {
         [FunctionName("create_basket")]
@@ -27,7 +21,6 @@ namespace cmd_api
             [Queue(QueuesNames.CommandsQueue, Connection = "AzureWebJobsStorage")] out string queueMessage,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
             if(!req.Query.ContainsKey("name"))
                 throw new Exception("Missing basket name");
             
@@ -36,6 +29,7 @@ namespace cmd_api
                 BasketId = Guid.NewGuid().ToString(),
                 BasketName = req.Query["name"]
             }.SerializeObject();
+            
             return (ActionResult)new OkObjectResult($"New command pushed to queue");
         }
     }
